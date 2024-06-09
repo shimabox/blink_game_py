@@ -5,7 +5,9 @@ description = "Add your description here"
 authors = [
     { name = "shimabox", email = "shimabox@gmail.com" }
 ]
-dependencies = []
+dependencies = [
+    "opencv-python>=4.10.0.82",
+]
 readme = "README.md"
 requires-python = ">= 3.8"
 

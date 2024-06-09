@@ -9,4 +9,8 @@
 #   generate-hashes: false
 
 -e file:.
+numpy==1.26.4
+    # via opencv-python
+opencv-python==4.10.0.82
+    # via blink-game-py
 ruff==0.4.8
