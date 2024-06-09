@@ -5,17 +5,24 @@
 
 ## これはなに
 
-WEBカメラの映像から顔と目を検出して、目をつぶったら画面キャプチャを終了するというちょっとしたゲーム感覚のやつです。
+WEBカメラの映像から顔と目を検出して、目をつぶったら画面キャプチャを終了するという、ちょっとしたゲーム感覚のやつです。
 
 ## 前提条件
 
 - Ryeがinstallされていること
   - [Installation - Rye](https://rye.astral.sh/guide/installation/ "Installation - Rye")
+  - ```sh
+    curl -sSf https://rye.astral.sh/get | bash
+    ```
+  - ```
+    echo 'source "$HOME/.rye/env"' >> ~/.zshrc
+    ```
 
-※ Note: python(3系(3.8>=))が入っていれば以下でいけるかもしれません
+※ Note: python(3系(3.8>=))が入っていれば、ryeを入れなくても以下でいけるかもしれません
 ```sh
 sed '/-e/d' requirements.lock > requirements.txt
 pip install -r requirements.txt
+python src/blink_game_py/main.py
 ```
 
 ## 実行
