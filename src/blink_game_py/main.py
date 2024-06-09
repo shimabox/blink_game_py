@@ -1,5 +1,4 @@
 import sys
-import time
 from datetime import datetime
 
 import cv2
@@ -146,15 +145,7 @@ while True:
     # 処理速度を高めるために画像をグレースケールに変換したものを用意
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    if is_started is True:
-        closed_eyes = is_closed_eyes(gray, face_parts)
-        if closed_eyes is True:
-            draw_elapsed_time(frame=frame, start_time=start_time)
-            put_text(frame, 'End', (10, 100))
-            cv2.imshow('frame', frame)  # 目が閉じられたであろう瞬間を残す
-            break
-        else:
-            draw_elapsed_time(frame=frame, start_time=start_time)
+    
 
     if is_started is False:
         face_parts = detect_face_parts(gray)
@@ -180,6 +171,16 @@ while True:
             2,
             2
         )
+
+    if is_started is True:
+        closed_eyes = is_closed_eyes(gray, face_parts)
+        if closed_eyes is True:
+            draw_elapsed_time(frame=frame, start_time=start_time)
+            put_text(frame, 'End', (10, 100))
+            cv2.imshow('frame', frame)  # 目が閉じられたであろう瞬間を残す
+            break
+        else:
+            draw_elapsed_time(frame=frame, start_time=start_time)
 
     cv2.imshow('frame', frame)
 
