@@ -12,6 +12,9 @@ import cv2
 @link http://workpiles.com/2015/04/opencv-detectmultiscale-scalefactor/
 '''
 
+# フレームサイズ
+FRAME_WIDTH = 640
+FRAME_HEIGHT = 480
 
 # 顔の大きさが適切範囲か
 def within_range_face_size(w):
@@ -109,6 +112,10 @@ cap = cv2.VideoCapture(0)
 if cap.isOpened() is False:
     print('Can not open camera')
     sys.exit()
+
+# フレームサイズを設定
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, FRAME_WIDTH)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAME_HEIGHT)
 
 # 分類器を読み込み
 # https://github.com/opencv/opencv/tree/master/data/haarcascades
