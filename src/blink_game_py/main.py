@@ -1,6 +1,5 @@
 import sys
 from datetime import datetime
-
 import cv2
 
 '''
@@ -15,15 +14,30 @@ import cv2
 FRAME_WIDTH = 640
 FRAME_HEIGHT = 480
 
-# 顔の大きさが適切範囲か
-def within_range_face_size(w):
-    if 180 <= w <= 240:  # 調整いるかも
+def within_range_face_size(w: int) -> bool:
+    """
+    顔の大きさが適切範囲かを確認する。
+
+    Args:
+        w (int): 顔の幅
+
+    Returns:
+        bool: 顔の幅が適切な範囲内であればTrue、そうでなければFalse
+    """
+    if 180 <= w <= 240: # 調整いるかも
         return True
     return False
 
+def detect_face_parts(gray_frame: cv2.Mat) -> dict[str, int]:
+    """
+    顔部分の情報を検出する。
 
-# 顔部分の情報を検出
-def detect_face_parts(gray_frame):
+    Args:
+        gray_frame (cv2.Mat): グレースケールのフレーム
+
+    Returns:
+        dict[str, int]: 顔部分の座標とサイズの辞書
+    """
     facerect = cascade.detectMultiScale(
         gray_frame,
         scaleFactor=1.11,
@@ -38,9 +52,17 @@ def detect_face_parts(gray_frame):
 
     return {}
 
+def is_closed_eyes(gray_frame: cv2.Mat, face_parts: dict[str, int]) -> bool:
+    """
+    目を閉じているかを確認する。
 
-# 目を閉じているか
-def is_closed_eyes(gray_frame, face_parts):
+    Args:
+        gray_frame (cv2.Mat): グレースケールのフレーム
+        face_parts (dict[str, int]): 顔部分の座標とサイズの辞書
+
+    Returns:
+        bool: 目が閉じていればTrue、開いていればFalse
+    """
     # 顔の部分
     face_x = face_parts['x']
     face_y = face_parts['y']
@@ -82,15 +104,28 @@ def is_closed_eyes(gray_frame, face_parts):
     # どちらかの目が開いていればOK
     return len(left_eye) + len(right_eye) <= 2
 
+def draw_elapsed_time(frame: cv2.Mat, start_time: int) -> None:
+    """
+    経過時間を描画する。
 
-# 経過時間を描画
-def draw_elapsed_time(frame, start_time):
+    Args:
+        frame (cv2.Mat): フレーム
+        start_time (int): 開始時刻のタイムスタンプ
+    """
     now = int(datetime.now().timestamp())
     put_text(frame, str(now - start_time))
 
+def put_text(frame: cv2.Mat, text: str, org: tuple[int, int] = (10, 50), fontScale: int = 3, thickness: int = 3) -> None:
+    """
+    フレームにテキストを描画する。
 
-# put a text in cv2
-def put_text(frame, text, org=(10, 50), fontScale=3, thickness=3):
+    Args:
+        frame (cv2.Mat): フレーム
+        text (str): 描画するテキスト
+        org (tuple[int, int], optional): テキストの位置. Defaults to (10, 50).
+        fontScale (int, optional): フォントのスケール. Defaults to 3.
+        thickness (int, optional): フォントの太さ. Defaults to 3.
+    """
     cv2.putText(
         frame,
         text,
@@ -102,13 +137,12 @@ def put_text(frame, text, org=(10, 50), fontScale=3, thickness=3):
         cv2.LINE_AA
     )
 
-
 #
 # start
 #
 cap = cv2.VideoCapture(0)
 
-if cap.isOpened() is False:
+if not cap.isOpened():
     print('Can not open camera')
     sys.exit()
 
@@ -145,14 +179,12 @@ while True:
     # 処理速度を高めるために画像をグレースケールに変換したものを用意
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    
-
-    if is_started is False:
+    if not is_started:
         face_parts = detect_face_parts(gray)
         # print(face_parts)
         if len(face_parts) != 0 \
                 and within_range_face_size(face_parts['w']) \
-                and is_closed_eyes(gray, face_parts) is False:
+                and not is_closed_eyes(gray, face_parts):
 
             put_text(frame, 'Please press "s"')
 
@@ -161,7 +193,7 @@ while True:
                 is_started = True
                 start_time = int(datetime.now().timestamp())
 
-    if is_started is True and show_fps is True:
+    if is_started and show_fps:
         # FPSを計算する
         fps = cv2.getTickFrequency() / (cv2.getTickCount() - tick)
         put_text(
@@ -172,9 +204,9 @@ while True:
             2
         )
 
-    if is_started is True:
+    if is_started:
         closed_eyes = is_closed_eyes(gray, face_parts)
-        if closed_eyes is True:
+        if closed_eyes:
             draw_elapsed_time(frame=frame, start_time=start_time)
             put_text(frame, 'End', (10, 100))
             cv2.imshow('frame', frame)  # 目が閉じられたであろう瞬間を残す
@@ -189,9 +221,8 @@ while True:
     if k == 27:
         break
 
-
 # 後処理
-if closed_eyes is True:
+if closed_eyes:
     while True:
         k = cv2.waitKey(100)
         if k == 27:  # ESC が押されたらclose
