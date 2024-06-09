@@ -1,6 +1,7 @@
 import sys
 from datetime import datetime
 import cv2
+import os
 
 '''
 参考
@@ -152,16 +153,11 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAME_HEIGHT)
 
 # 分類器を読み込み
 # https://github.com/opencv/opencv/tree/master/data/haarcascades
-cascade = cv2.CascadeClassifier(
-    'haarcascades/haarcascade_frontalface_alt2.xml'
-)
-# leftとrightは逆転する
-left_eye_cascade = cv2.CascadeClassifier(
-    'haarcascades/haarcascade_righteye_2splits.xml'
-)
-right_eye_cascade = cv2.CascadeClassifier(
-    'haarcascades/haarcascade_lefteye_2splits.xml'
-)
+# 分類器ファイルのパスを指定
+base_path = os.path.join(os.path.dirname(__file__), '../../haarcascades')
+cascade = cv2.CascadeClassifier(os.path.join(base_path, 'haarcascade_frontalface_alt2.xml'))
+left_eye_cascade = cv2.CascadeClassifier(os.path.join(base_path, 'haarcascade_righteye_2splits.xml'))
+right_eye_cascade = cv2.CascadeClassifier(os.path.join(base_path, 'haarcascade_lefteye_2splits.xml'))
 
 closed_eyes = False
 is_started = False
