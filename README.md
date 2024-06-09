@@ -12,6 +12,12 @@ WEBカメラの映像から顔と目を検出して、目をつぶったら画�
 - Ryeがinstallされていること
   - [Installation - Rye](https://rye.astral.sh/guide/installation/ "Installation - Rye")
 
+※ Note: python(3系(3.8>=))が入っていれば以下でいけるかもしれません
+```sh
+sed '/-e/d' requirements.lock > requirements.txt
+pip install -r requirements.txt
+```
+
 ## 実行
 
 ### 1. clone
