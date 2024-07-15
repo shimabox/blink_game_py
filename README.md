@@ -18,7 +18,7 @@ WEBカメラの映像から顔と目を検出して、目をつぶったら画�
     echo 'source "$HOME/.rye/env"' >> ~/.zshrc
     ```
 
-※ Note: python(3系(3.8>=))が入っていれば、ryeを入れなくても以下でいけるかもしれません
+※ Note: python(3系(3.8>=))が入っていれば、ryeを入れなくても以下でいけるかもしれません (これで動きました)
 ```sh
 sed '/-e/d' requirements.lock > requirements.txt
 pip install -r requirements.txt
