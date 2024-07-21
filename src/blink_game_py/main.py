@@ -53,7 +53,7 @@ def detect_face_parts(frame_image: cv2.Mat) -> dict[str, int]:
 
     return {}
 
-def is_closed_eyes(frame_image: cv2.Mat, face_parts: dict[str, int]) -> bool:
+def detect_eye_closed(frame_image: cv2.Mat, face_parts: dict[str, int]) -> bool:
     """
     目を閉じているかを確認する。
 
@@ -160,7 +160,7 @@ cascade = cv2.CascadeClassifier(os.path.join(base_path, 'haarcascade_frontalface
 left_eye_cascade = cv2.CascadeClassifier(os.path.join(base_path, 'haarcascade_righteye_2splits.xml'))
 right_eye_cascade = cv2.CascadeClassifier(os.path.join(base_path, 'haarcascade_lefteye_2splits.xml'))
 
-closed_eyes = False
+is_closed_eyes = False
 is_started = False
 start_time = 0
 closed_time = 0
@@ -180,7 +180,7 @@ while True:
         face_parts = detect_face_parts(grayscale_image)
         if len(face_parts) != 0 \
                 and within_range_face_size(face_parts['w']) \
-                and not is_closed_eyes(grayscale_image, face_parts):
+                and not detect_eye_closed(grayscale_image, face_parts):
 
             put_text(frame, 'Please press "s"')
 
@@ -201,8 +201,8 @@ while True:
         )
 
     if is_started:
-        closed_eyes = is_closed_eyes(grayscale_image, face_parts)
-        if closed_eyes:
+        is_closed_eyes = detect_eye_closed(grayscale_image, face_parts)
+        if is_closed_eyes:
             draw_elapsed_time(frame=frame, start_time=start_time)
             put_text(frame, 'End', (10, 100))
             cv2.imshow('frame', frame) # 目が閉じられたであろう瞬間を残す
@@ -218,7 +218,7 @@ while True:
         break
 
 # 後処理
-if closed_eyes:
+if is_closed_eyes:
     while True:
         k = cv2.waitKey(100)
         if k == 27: # ESC が押されたらclose
