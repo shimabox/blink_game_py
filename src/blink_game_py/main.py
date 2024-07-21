@@ -117,7 +117,7 @@ def draw_elapsed_time(frame: cv2.Mat, start_time: int) -> None:
     now = int(datetime.now().timestamp())
     put_text(frame, str(now - start_time))
 
-def put_text(frame: cv2.Mat, text: str, org: tuple[int, int] = (10, 50), fontScale: int = 3, thickness: int = 3) -> None:
+def put_text(frame: cv2.Mat, text: str, org: tuple[int, int] = (10, 50), font_scale: int = 3, thickness: int = 3) -> None:
     """
     フレームにテキストを描画する。
 
@@ -125,7 +125,7 @@ def put_text(frame: cv2.Mat, text: str, org: tuple[int, int] = (10, 50), fontSca
         frame (cv2.Mat): フレーム
         text (str): 描画するテキスト
         org (tuple[int, int], optional): テキストの位置. Defaults to (10, 50).
-        fontScale (int, optional): フォントのスケール. Defaults to 3.
+        font_scale (int, optional): フォントのスケール. Defaults to 3.
         thickness (int, optional): フォントの太さ. Defaults to 3.
     """
     cv2.putText(
@@ -133,7 +133,7 @@ def put_text(frame: cv2.Mat, text: str, org: tuple[int, int] = (10, 50), fontSca
         text,
         org,
         cv2.FONT_HERSHEY_PLAIN,
-        fontScale,
+        font_scale,
         (0, 255, 0),
         thickness,
         cv2.LINE_AA
