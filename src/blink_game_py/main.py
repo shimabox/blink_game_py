@@ -72,9 +72,10 @@ def is_closed_eyes(gray_frame: cv2.Mat, face_parts: dict[str, int]) -> bool:
 
     # 顔の部分から目の近傍を取る
     eyes = gray_frame[face_y: face_y + int(face_h/2), face_x: face_x + face_w]
+    # 目の近傍部分のキャプチャを表示したい場合コメントを外す
     # cv2.imshow('face', eyes)
 
-    min_size = (8, 8)  # 調整いるかも
+    min_size = (8, 8) # 調整いるかも
 
     ''' 目の検出
     眼鏡をかけている場合、精度は低くなる。
@@ -163,7 +164,7 @@ closed_eyes = False
 is_started = False
 start_time = 0
 closed_time = 0
-show_fps = False  # FPSを表示するかどうか
+show_fps = False # FPSを表示するかどうか
 
 while True:
     # VideoCaptureから1フレーム読み込む
@@ -177,7 +178,6 @@ while True:
 
     if not is_started:
         face_parts = detect_face_parts(gray)
-        # print(face_parts)
         if len(face_parts) != 0 \
                 and within_range_face_size(face_parts['w']) \
                 and not is_closed_eyes(gray, face_parts):
@@ -185,7 +185,7 @@ while True:
             put_text(frame, 'Please press "s"')
 
             key = cv2.waitKey(100)
-            if key == 115:  # s が押されたら
+            if key == 115: # s が押されたら
                 is_started = True
                 start_time = int(datetime.now().timestamp())
 
@@ -205,7 +205,7 @@ while True:
         if closed_eyes:
             draw_elapsed_time(frame=frame, start_time=start_time)
             put_text(frame, 'End', (10, 100))
-            cv2.imshow('frame', frame)  # 目が閉じられたであろう瞬間を残す
+            cv2.imshow('frame', frame) # 目が閉じられたであろう瞬間を残す
             break
         else:
             draw_elapsed_time(frame=frame, start_time=start_time)
@@ -221,7 +221,7 @@ while True:
 if closed_eyes:
     while True:
         k = cv2.waitKey(100)
-        if k == 27:  # ESC が押されたらclose
+        if k == 27: # ESC が押されたらclose
             break
 
 cap.release()
