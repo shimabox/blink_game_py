@@ -29,18 +29,18 @@ def within_range_face_size(w: int) -> bool:
         return True
     return False
 
-def detect_face_parts(gray_frame: cv2.Mat) -> dict[str, int]:
+def detect_face_parts(frame_image: cv2.Mat) -> dict[str, int]:
     """
     顔部分の情報を検出する。
 
     Args:
-        gray_frame (cv2.Mat): グレースケールのフレーム
+        frame_image (cv2.Mat): フレーム画像
 
     Returns:
         dict[str, int]: 顔部分の座標とサイズの辞書
     """
     facerect = cascade.detectMultiScale(
-        gray_frame,
+        frame_image,
         scaleFactor=1.11,
         minNeighbors=3,
         minSize=(100, 100)
@@ -53,12 +53,12 @@ def detect_face_parts(gray_frame: cv2.Mat) -> dict[str, int]:
 
     return {}
 
-def is_closed_eyes(gray_frame: cv2.Mat, face_parts: dict[str, int]) -> bool:
+def is_closed_eyes(frame_image: cv2.Mat, face_parts: dict[str, int]) -> bool:
     """
     目を閉じているかを確認する。
 
     Args:
-        gray_frame (cv2.Mat): グレースケールのフレーム
+        frame_image (cv2.Mat): フレーム画像
         face_parts (dict[str, int]): 顔部分の座標とサイズの辞書
 
     Returns:
@@ -71,7 +71,7 @@ def is_closed_eyes(gray_frame: cv2.Mat, face_parts: dict[str, int]) -> bool:
     face_h = face_parts['h']
 
     # 顔の部分から目の近傍を取る
-    eyes = gray_frame[face_y: face_y + int(face_h/2), face_x: face_x + face_w]
+    eyes = frame_image[face_y: face_y + int(face_h/2), face_x: face_x + face_w]
     # 目の近傍部分のキャプチャを表示したい場合コメントを外す
     # cv2.imshow('face', eyes)
 
@@ -174,13 +174,13 @@ while True:
         tick = cv2.getTickCount()
 
     # 処理速度を高めるために画像をグレースケールに変換したものを用意
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    grayscale_image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     if not is_started:
-        face_parts = detect_face_parts(gray)
+        face_parts = detect_face_parts(grayscale_image)
         if len(face_parts) != 0 \
                 and within_range_face_size(face_parts['w']) \
-                and not is_closed_eyes(gray, face_parts):
+                and not is_closed_eyes(grayscale_image, face_parts):
 
             put_text(frame, 'Please press "s"')
 
@@ -201,7 +201,7 @@ while True:
         )
 
     if is_started:
-        closed_eyes = is_closed_eyes(gray, face_parts)
+        closed_eyes = is_closed_eyes(grayscale_image, face_parts)
         if closed_eyes:
             draw_elapsed_time(frame=frame, start_time=start_time)
             put_text(frame, 'End', (10, 100))
