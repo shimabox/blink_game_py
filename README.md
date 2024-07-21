@@ -1,7 +1,7 @@
 # blink_game_py
 目をつぶったら画面キャプチャを終了するやつ(Python+OpenCV)
 
-![IMG_4896](https://github.com/shimabox/blink_game_py/assets/2285196/cd663444-aab4-478c-9dd9-2d0988598aa6)
+![demo](https://github.com/shimabox/assets/raw/master/blink_game_py/demo.gif)
 
 ## これはなに
 
